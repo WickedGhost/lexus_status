@@ -1,12 +1,12 @@
 {
   "domain": "lexus_status",
   "name": "HA Lexus Status",
-  "version": "v1.0.0",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": [],
   "documentation": "https://github.com/WickedGhost/lexus_status",
+  "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/WickedGhost/lexus_status/issues",
   "requirements": ["pytoyoda>=5.0.0"],
-  "dependencies": [],
-  "codeowners": [],
-  "iot_class": "cloud_polling",
-  "config_flow": true
+  "version": "v1.0.0"
 }
