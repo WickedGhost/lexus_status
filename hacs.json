@@ -1,0 +1,6 @@
+{
+  "name": "Lexus Tibber Integration",
+  "description": "Reads the battery state of charge from a Lexus UX300e via Lexus Connected Services and keeps the Tibber EV profile up-to-date.",
+  "render_readme": true,
+  "homeassistant": "2024.1.0"
+}

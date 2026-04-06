@@ -1,0 +1,47 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Lexus Connected Services",
+        "description": "Enter your MyLexus / Lexus Link (Toyota Connected Europe) credentials. Only EU accounts are supported.",
+        "data": {
+          "lexus_username": "Email address",
+          "lexus_password": "Password"
+        }
+      },
+      "lexus_vehicle": {
+        "title": "Select vehicle",
+        "description": "More than one vehicle was found. Choose the Lexus UX300e you want to track.",
+        "data": {
+          "lexus_vin": "Vehicle"
+        }
+      },
+      "options": {
+        "title": "Polling interval",
+        "description": "How often (in minutes) should Home Assistant read the battery level from Lexus Connected Services?",
+        "data": {
+          "scan_interval": "Update interval (minutes)"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid Lexus credentials. Please check your email and password.",
+      "cannot_connect": "Could not connect to Lexus Connected Services. Check your network and try again.",
+      "missing_library": "The pytoyoda library is not installed. Restart Home Assistant after installation.",
+      "unknown": "An unexpected error occurred. See the Home Assistant logs for details."
+    },
+    "abort": {
+      "already_configured": "This vehicle is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Lexus UX300e options",
+        "data": {
+          "scan_interval": "Update interval (minutes)"
+        }
+      }
+    }
+  }
+}

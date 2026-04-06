@@ -1,0 +1,12 @@
+{
+  "domain": "lexus_tibber",
+  "name": "Lexus Tibber Integration",
+  "version": "1.0.0",
+  "documentation": "https://github.com/your-repo/lexus-tibber-integration",
+  "issue_tracker": "https://github.com/your-repo/lexus-tibber-integration/issues",
+  "requirements": ["pytoyoda>=5.0.0"],
+  "dependencies": [],
+  "codeowners": [],
+  "iot_class": "cloud_polling",
+  "config_flow": true
+}
