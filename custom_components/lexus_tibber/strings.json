@@ -37,7 +37,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "Lexus UX300e options",
+        "title": "HA Lexus Status options",
         "data": {
           "scan_interval": "Update interval (minutes)"
         }

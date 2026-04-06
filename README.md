@@ -1,4 +1,4 @@
-# Lexus UX300e Integration for Home Assistant
+# HA Lexus Status
 
 A [Home Assistant](https://www.home-assistant.io/) custom component that reads battery status from a **Lexus UX300e** (or any other Toyota/Lexus EV on the EU platform) via Lexus Connected Services and exposes it as Home Assistant sensor entities.
 
@@ -39,7 +39,7 @@ You can then use these sensors in automations — for example, to notify you whe
 
 1. Open HACS → **Integrations** → ⋮ → **Custom repositories**.
 2. Add `https://github.com/your-repo/lexus-tibber-integration` with category **Integration**.
-3. Search for **Lexus UX300e** and install it.
+3. Search for **HA Lexus Status** and install it.
 4. Restart Home Assistant.
 
 ### Manual
@@ -51,7 +51,7 @@ You can then use these sensors in automations — for example, to notify you whe
 
 ## Configuration
 
-Go to **Settings → Devices & Services → Add Integration** and search for **Lexus UX300e**.
+Go to **Settings → Devices & Services → Add Integration** and search for **HA Lexus Status**.
 
 The setup wizard walks you through three steps:
 
@@ -79,7 +79,7 @@ The `battery_level` sensor also exposes `vin` and `last_lexus_update` as extra s
 
 ## Options
 
-After setup you can change the polling interval via **Settings → Devices & Services → Lexus UX300e → Configure**.
+After setup you can change the polling interval via **Settings → Devices & Services → HA Lexus Status → Configure**.
 
 ---
 
@@ -121,8 +121,7 @@ custom_components/lexus_tibber/
 ## License
 
 MIT
-
-       (battery SOC %)                (sensors)          (setStateOfCharge)
+                (sensors)          (setStateOfCharge)
 ```
 
 Every _N_ minutes (configurable, default 30 min) the integration:

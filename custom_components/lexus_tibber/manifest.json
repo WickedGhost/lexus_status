@@ -1,6 +1,6 @@
 {
   "domain": "lexus_tibber",
-  "name": "Lexus Tibber Integration",
+  "name": "HA Lexus Status",
   "version": "1.0.0",
   "documentation": "https://github.com/your-repo/lexus-tibber-integration",
   "issue_tracker": "https://github.com/your-repo/lexus-tibber-integration/issues",
