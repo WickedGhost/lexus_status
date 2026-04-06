@@ -1,6 +1,4 @@
 {
   "name": "HA Lexus Status",
-  "description": "Reads battery status from a Lexus UX300e via Lexus Connected Services and exposes it as Home Assistant sensor entities.",
-  "render_readme": true,
   "homeassistant": "2024.1.0"
 }
