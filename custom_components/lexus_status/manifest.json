@@ -1,9 +1,9 @@
 {
-  "domain": "lexus_tibber",
+  "domain": "lexus_status",
   "name": "HA Lexus Status",
   "version": "1.0.0",
-  "documentation": "https://github.com/your-repo/lexus-tibber-integration",
-  "issue_tracker": "https://github.com/your-repo/lexus-tibber-integration/issues",
+  "documentation": "https://github.com/WickedGhost/lexus_status",
+  "issue_tracker": "https://github.com/WickedGhost/lexus_status/issues",
   "requirements": ["pytoyoda>=5.0.0"],
   "dependencies": [],
   "codeowners": [],

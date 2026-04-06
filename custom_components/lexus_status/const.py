@@ -1,6 +1,6 @@
 """Constants for the Lexus UX300e integration."""
 
-DOMAIN = "lexus_tibber"
+DOMAIN = "lexus_status"
 
 # Lexus Connected Services credentials
 # pytoyoda only supports the Toyota Connected Europe platform (EU accounts only)

@@ -38,13 +38,13 @@ You can then use these sensors in automations — for example, to notify you whe
 ### Via HACS (recommended)
 
 1. Open HACS → **Integrations** → ⋮ → **Custom repositories**.
-2. Add `https://github.com/your-repo/lexus-tibber-integration` with category **Integration**.
+2. Add `https://github.com/WickedGhost/lexus_status` with category **Integration**.
 3. Search for **HA Lexus Status** and install it.
 4. Restart Home Assistant.
 
 ### Manual
 
-1. Copy the `custom_components/lexus_tibber` folder into your HA `config/custom_components/` directory.
+1. Copy the `custom_components/lexus_status` folder into your HA `config/custom_components/` directory.
 2. Restart Home Assistant.
 
 ---
@@ -104,7 +104,7 @@ The [official Tibber integration](https://www.home-assistant.io/integrations/tib
 ## Architecture
 
 ```
-custom_components/lexus_tibber/
+custom_components/lexus_status/
 ├── __init__.py          # Integration setup / teardown
 ├── config_flow.py       # Multi-step UI configuration
 ├── const.py             # Domain constants and options
@@ -150,13 +150,13 @@ Every _N_ minutes (configurable, default 30 min) the integration:
 ### Via HACS (recommended)
 
 1. Open HACS → **Integrations** → ⋮ → **Custom repositories**.
-2. Add `https://github.com/your-repo/lexus-tibber-integration` with category **Integration**.
+2. Add `https://github.com/WickedGhost/lexus_status` with category **Integration**.
 3. Search for **Lexus Tibber Integration** and install it.
 4. Restart Home Assistant.
 
 ### Manual
 
-1. Copy the `custom_components/lexus_tibber` folder into your HA `config/custom_components/` directory.
+1. Copy the `custom_components/lexus_status` folder into your HA `config/custom_components/` directory.
 2. Restart Home Assistant.
 
 ---
@@ -210,7 +210,7 @@ After setup you can change the polling interval via **Settings → Devices & Ser
 ## Architecture
 
 ```
-custom_components/lexus_tibber/
+custom_components/lexus_status/
 ├── __init__.py          # Integration setup / teardown
 ├── config_flow.py       # Multi-step UI configuration
 ├── const.py             # Domain constants and options
