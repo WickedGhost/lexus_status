@@ -17,8 +17,15 @@
         }
       },
       "options": {
+        "title": "Update mode",
+        "description": "Choose how Home Assistant should fetch data from Lexus Connected Services.",
+        "data": {
+          "update_mode": "Update mode"
+        }
+      },
+      "scan_interval": {
         "title": "Polling interval",
-        "description": "How often (in minutes) should Home Assistant read the battery level from Lexus Connected Services?",
+        "description": "How often (in minutes) should Home Assistant read the data from Lexus Connected Services?",
         "data": {
           "scan_interval": "Update interval (minutes)"
         }
@@ -37,7 +44,15 @@
   "options": {
     "step": {
       "init": {
-        "title": "HA Lexus Status options",
+        "title": "Update mode",
+        "description": "Choose how Home Assistant should fetch data from Lexus Connected Services.",
+        "data": {
+          "update_mode": "Update mode"
+        }
+      },
+      "scan_interval": {
+        "title": "Polling interval",
+        "description": "How often (in minutes) should Home Assistant read the data from Lexus Connected Services?",
         "data": {
           "scan_interval": "Update interval (minutes)"
         }
