@@ -14,9 +14,12 @@ from .const import (
     CONF_LEXUS_USERNAME,
     CONF_LEXUS_VIN,
     CONF_SCAN_INTERVAL,
+    CONF_UPDATE_MODE,
     DEFAULT_SCAN_INTERVAL,
+    DEFAULT_UPDATE_MODE,
     DOMAIN,
     LEXUS_BRAND,
+    UPDATE_MODE_MANUAL,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -29,16 +32,31 @@ class LexusTibberCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Initialise coordinator."""
         self.entry = entry
 
-        scan_interval: int = entry.options.get(
-            CONF_SCAN_INTERVAL,
-            entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+        update_mode: str = entry.options.get(
+            CONF_UPDATE_MODE,
+            entry.data.get(CONF_UPDATE_MODE, DEFAULT_UPDATE_MODE),
         )
+
+        if update_mode == UPDATE_MODE_MANUAL:
+            interval = None
+        else:
+            scan_interval: int = entry.options.get(
+                CONF_SCAN_INTERVAL,
+                entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+            )
+            interval = timedelta(minutes=scan_interval)
 
         super().__init__(
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(minutes=scan_interval),
+            update_interval=interval,
+        )
+
+        _LOGGER.debug(
+            "Update mode: %s | interval: %s",
+            update_mode,
+            interval,
         )
 
         self._lexus_client: Any | None = None
