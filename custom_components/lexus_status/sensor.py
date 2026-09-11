@@ -1,4 +1,4 @@
-"""Sensor platform for the Lexus Tibber integration."""
+"""Sensor platform for the Lexus Status integration."""
 from __future__ import annotations
 
 import logging
@@ -12,14 +12,14 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, UnitOfLength
+from homeassistant.const import PERCENTAGE, UnitOfLength, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
-from .coordinator import LexusTibberCoordinator
+from .coordinator import LexusStatusCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -30,14 +30,14 @@ _LOGGER = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, kw_only=True)
-class LexusTibberSensorDescription(SensorEntityDescription):
+class LexusStatusSensorDescription(SensorEntityDescription):
     """Extended description that carries the coordinator data-key."""
 
     value_key: str = ""
 
 
-SENSOR_DESCRIPTIONS: tuple[LexusTibberSensorDescription, ...] = (
-    LexusTibberSensorDescription(
+SENSOR_DESCRIPTIONS: tuple[LexusStatusSensorDescription, ...] = (
+    LexusStatusSensorDescription(
         key="battery_level",
         value_key="battery_level",
         name="Battery Level",
@@ -47,7 +47,7 @@ SENSOR_DESCRIPTIONS: tuple[LexusTibberSensorDescription, ...] = (
         icon="mdi:battery-electric-vehicle",
         suggested_display_precision=0,
     ),
-    LexusTibberSensorDescription(
+    LexusStatusSensorDescription(
         key="range_km",
         value_key="range_km",
         name="Electric Range",
@@ -57,22 +57,22 @@ SENSOR_DESCRIPTIONS: tuple[LexusTibberSensorDescription, ...] = (
         icon="mdi:map-marker-distance",
         suggested_display_precision=0,
     ),
-    LexusTibberSensorDescription(
+    LexusStatusSensorDescription(
         key="charging_status",
         value_key="charging_status",
         name="Charging Status",
         icon="mdi:ev-station",
     ),
-    LexusTibberSensorDescription(
+    LexusStatusSensorDescription(
         key="remaining_charge_time",
         value_key="remaining_charge_time",
         name="Remaining Charge Time",
-        native_unit_of_measurement="min",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:timer-outline",
         suggested_display_precision=0,
     ),
-    LexusTibberSensorDescription(
+    LexusStatusSensorDescription(
         key="last_lexus_update",
         value_key="last_lexus_update",
         name="Last Synced from Lexus",
@@ -92,11 +92,11 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up all Lexus Tibber sensors from the config entry."""
-    coordinator: LexusTibberCoordinator = hass.data[DOMAIN][entry.entry_id]
+    """Set up all Lexus Status sensors from the config entry."""
+    coordinator: LexusStatusCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     async_add_entities(
-        LexusTibberSensorEntity(coordinator, description)
+        LexusStatusSensorEntity(coordinator, description)
         for description in SENSOR_DESCRIPTIONS
     )
 
@@ -106,18 +106,18 @@ async def async_setup_entry(
 # ---------------------------------------------------------------------------
 
 
-class LexusTibberSensorEntity(
-    CoordinatorEntity[LexusTibberCoordinator], SensorEntity
+class LexusStatusSensorEntity(
+    CoordinatorEntity[LexusStatusCoordinator], SensorEntity
 ):
-    """Represents a single Lexus Tibber sensor."""
+    """Represents a single Lexus Status sensor."""
 
-    entity_description: LexusTibberSensorDescription
+    entity_description: LexusStatusSensorDescription
     _attr_has_entity_name = True
 
     def __init__(
         self,
-        coordinator: LexusTibberCoordinator,
-        description: LexusTibberSensorDescription,
+        coordinator: LexusStatusCoordinator,
+        description: LexusStatusSensorDescription,
     ) -> None:
         """Initialise the sensor."""
         super().__init__(coordinator)

@@ -1,4 +1,4 @@
-"""Lexus Tibber Integration – Home Assistant entry point."""
+"""Lexus Status integration – Home Assistant entry point."""
 from __future__ import annotations
 
 import logging
@@ -8,7 +8,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall
 
 from .const import DOMAIN
-from .coordinator import LexusTibberCoordinator
+from .coordinator import LexusStatusCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -17,8 +17,8 @@ SERVICE_REFRESH = "refresh"
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up Lexus Tibber from a config entry."""
-    coordinator = LexusTibberCoordinator(hass, entry)
+    """Set up Lexus Status from a config entry."""
+    coordinator = LexusStatusCoordinator(hass, entry)
 
     # Perform initial refresh – raises ConfigEntryNotReady on failure
     await coordinator.async_config_entry_first_refresh()
@@ -46,7 +46,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
-        coordinator: LexusTibberCoordinator = hass.data[DOMAIN].pop(entry.entry_id)
+        coordinator: LexusStatusCoordinator = hass.data[DOMAIN].pop(entry.entry_id)
         await coordinator.async_shutdown()
 
         # Remove the service when the last entry is unloaded

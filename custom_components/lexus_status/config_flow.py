@@ -60,7 +60,7 @@ async def _lexus_login_and_list(
 # ---------------------------------------------------------------------------
 
 
-class LexusTibberConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class LexusStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Multi-step config flow: Lexus credentials → vehicle → options."""
 
     VERSION = 1
@@ -233,7 +233,7 @@ class LexusTibberConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         config_entry: config_entries.ConfigEntry,
     ) -> config_entries.OptionsFlow:
         """Return the options flow handler."""
-        return LexusTibberOptionsFlow(config_entry)
+        return LexusStatusOptionsFlow(config_entry)
 
 
 # ---------------------------------------------------------------------------
@@ -241,7 +241,7 @@ class LexusTibberConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 # ---------------------------------------------------------------------------
 
 
-class LexusTibberOptionsFlow(config_entries.OptionsFlow):
+class LexusStatusOptionsFlow(config_entries.OptionsFlow):
     """Options flow: change update mode and polling interval."""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:

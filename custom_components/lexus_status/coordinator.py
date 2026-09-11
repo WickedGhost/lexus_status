@@ -25,7 +25,7 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-class LexusTibberCoordinator(DataUpdateCoordinator[dict[str, Any]]):
+class LexusStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Poll Lexus Connected Services for EV status data."""
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
