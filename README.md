@@ -2,6 +2,13 @@
 
 A [Home Assistant](https://www.home-assistant.io/) custom component that reads battery status from a **Lexus UX300e** (or any other Toyota/Lexus EV on the EU platform) via Lexus Connected Services and exposes it as Home Assistant sensor entities.
 
+## Release notes
+
+### v1.0.2
+- Cleaned up the remaining stale Tibber naming and documentation references
+- Updated compatibility wording and validation checklist for Home Assistant Core 2026.9.1
+- Standardized the remaining charge time sensor unit to Home Assistant's official minutes unit
+
 ---
 
 ## How it works
@@ -120,18 +127,27 @@ After setup you can change the update mode and polling interval via **Settings �
 
 ---
 
+## HA Core version check
+
+Before treating this as a production-ready install, verify the following in Home Assistant Core 2026.9.1:
+
+- [ ] HA Core is running at version 2026.9.1 or newer
+- [ ] The custom component is installed in `config/custom_components/lexus_status`
+- [ ] `pytoyoda>=5.0.0` has been resolved by Home Assistant without startup errors
+- [ ] The integration config flow opens and accepts your Lexus Connected Services credentials
+- [ ] A vehicle is selected from the account and the config entry is created
+- [ ] The entities are created under the expected device and update cycle
+- [ ] Manual refresh works via `lexus_status.refresh`
+- [ ] No `missing_library`, `cannot_connect`, or auth errors are logged during startup
+
+---
+
 ## Troubleshooting
 
 * **`cannot_connect`** during setup – Check that your Lexus credentials work in the MyLexus mobile app and that your HA instance has internet access.
 * **`missing_library`** – Make sure `pytoyoda>=5.0.0` is listed in the integration manifest and that HA has installed it (check HA logs on startup).
 * **EU accounts only** – `pytoyoda` only supports Toyota Connected Europe. North American / Asian Toyota/Lexus accounts are not supported.
 * **Battery level not updating** – The Lexus Connected Services API only refreshes the car's data when the car is awake (ignition on, or actively charging). Values can be stale for parked vehicles. In Manual mode, call `lexus_status.refresh` after you know the car is awake.
-
-* **`cannot_connect`** during setup – Check that your Lexus credentials work in the MyLexus mobile app and that your HA instance has internet access.
-* **`missing_library`** – Make sure `pytoyoda>=5.0.0` is listed in the integration manifest and that HA has installed it (check HA logs on startup).
-* **EU accounts only** – `pytoyoda` only supports Toyota Connected Europe. North American / Asian Toyota/Lexus accounts are not supported.
-* **Tibber sync always `Failed`** – Check the HA logs for the exact GraphQL error. Ensure the vehicle ID is correct (run `{ viewer { homes { electricVehicles { id name } } } }` in the [Tibber Explorer](https://developer.tibber.com/explorer) to find it).
-* **Battery level not updating** – The Lexus Connected Services API only refreshes the car's data when the car is awake (ignition on, or actively charging). Values can be stale for parked vehicles.
 
 ---
 
@@ -142,7 +158,7 @@ custom_components/lexus_status/
 ├── __init__.py          # Integration setup / teardown
 ├── config_flow.py       # Multi-step UI configuration
 ├── const.py             # Domain constants and options
-├── coordinator.py       # DataUpdateCoordinator (polling + Tibber push)
+├── coordinator.py       # DataUpdateCoordinator (polling + Lexus refresh logic)
 ├── manifest.json        # HA integration manifest
 ├── sensor.py            # Sensor platform entities
 ├── strings.json         # UI string keys
