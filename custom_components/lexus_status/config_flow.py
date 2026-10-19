@@ -4,6 +4,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from pytoyoda.client import MyT
 import voluptuous as vol
 
 from homeassistant import config_entries
@@ -39,8 +40,6 @@ async def _lexus_login_and_list(
     username: str, password: str
 ) -> list[dict[str, str]]:
     """Authenticate against Lexus Connected Services (EU) and list vehicles."""
-    from pytoyoda.client import MyT  # noqa: PLC0415
-
     client = MyT(
         username=username,
         password=password,

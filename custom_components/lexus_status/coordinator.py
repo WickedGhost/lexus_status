@@ -5,6 +5,8 @@ import logging
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
+from pytoyoda.client import MyT
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -70,14 +72,6 @@ class LexusStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Return an authenticated MyT client, (re-)creating it if needed."""
         if self._lexus_client is not None:
             return self._lexus_client
-
-        try:
-            from pytoyoda.client import MyT  # noqa: PLC0415
-        except ImportError as err:
-            raise UpdateFailed(
-                "pytoyoda library is not installed. "
-                "Add pytoyoda>=5.0.0 to your requirements."
-            ) from err
 
         client = MyT(
             username=self.entry.data[CONF_LEXUS_USERNAME],

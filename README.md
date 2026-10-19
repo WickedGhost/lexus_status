@@ -1,8 +1,13 @@
 # HA Lexus Status
 
-A [Home Assistant](https://www.home-assistant.io/) custom component that reads battery status from a **Lexus UX300e** (or any other Toyota/Lexus EV on the EU platform) via Lexus Connected Services and exposes it as Home Assistant sensor entities.
+Monitor your Lexus EV from [Home Assistant](https://www.home-assistant.io/) using Lexus Connected Services. The integration supports the UX300e and other Toyota/Lexus electric vehicles on the **European platform**.
+
+It provides battery level, electric range, charging status, remaining charge time, and the time of the last successful update. Choose automatic polling or refresh the data on demand.
 
 ## Release notes
+
+### v1.0.3
+- Load `pytoyoda` through Home Assistant's integration import path to avoid blocking the event loop during setup and updates
 
 ### v1.0.2
 - Cleaned up the remaining stale Tibber naming and documentation references
@@ -11,85 +16,65 @@ A [Home Assistant](https://www.home-assistant.io/) custom component that reads b
 
 ---
 
-## How it works
+## Features
 
 ```
-Lexus Connected Services API  ──►  Home Assistant sensors
-       (battery, range, charging)
+Lexus Connected Services  ->  HA Lexus Status  ->  Home Assistant sensors
 ```
 
-The integration authenticates against Toyota / Lexus Connected Services and reads:
-
-- Battery state of charge (%)
-- Estimated electric range (km)
-- Charging status
-- Remaining charge time (min)
-- Timestamp of the last successful data fetch
-
-Data can be fetched **automatically** on a configurable interval or **on demand** via an automation or the Home Assistant service call `lexus_status.refresh`.
+- Battery charge level and estimated electric range
+- Charging state and estimated time remaining to full charge
+- Timestamp of the most recent successful data fetch
+- Periodic polling or manual refresh, configured per entry
 
 ---
 
 ## Prerequisites
 
-| Requirement | Notes |
+| Requirement | Details |
 |---|---|
-| Home Assistant ≥ 2024.1 | Core integration APIs used |
-| Lexus Connected Services account | EU accounts only — same credentials as the MyLexus / Lexus Link app |
-| Lexus UX300e (or other Toyota/Lexus EV on the EU platform) | Must have a connected-services subscription |
+| Home Assistant | Core 2024.1 or newer |
+| Lexus account | European Toyota Connected Services account; use your MyLexus / Lexus Link credentials |
+| Vehicle | Lexus UX300e or another supported Toyota/Lexus EV on the EU platform, with connected services enabled |
 
 ---
 
 ## Installation
 
-### Via HACS (recommended)
+### HACS (recommended)
 
-1. Open HACS → **Integrations** → ⋮ → **Custom repositories**.
-2. Add `https://github.com/WickedGhost/lexus_status` with category **Integration**.
-3. Search for **HA Lexus Status** and install it.
-4. Restart Home Assistant.
+1. In HACS, open **Integrations** and choose **Custom repositories** from the menu.
+2. Add `https://github.com/WickedGhost/lexus_status` with the **Integration** category.
+3. Find **HA Lexus Status**, install it, then restart Home Assistant.
 
 ### Manual
 
-1. Copy the `custom_components/lexus_status` folder into your HA `config/custom_components/` directory.
+1. Copy `custom_components/lexus_status` into `config/custom_components/`.
 2. Restart Home Assistant.
 
 ---
 
 ## Configuration
 
-Go to **Settings → Devices & Services → Add Integration** and search for **HA Lexus Status**.
+Go to **Settings → Devices & Services → Add Integration**, then search for **HA Lexus Status**. Enter your Lexus account credentials and select a vehicle if more than one is found.
 
-The setup wizard walks you through up to four steps:
+Choose an update mode. Periodic mode also asks for an interval between 5 and 240 minutes (default: 30 minutes).
 
-| Step | What you enter |
-|---|---|
-| 1 | Lexus email and password |
-| 2 | Select your vehicle (skipped if you only have one) |
-| 3 | Update mode — **Periodic** or **Manual** |
-| 4 | Polling interval in minutes (5 – 240, default 30) — only shown when Periodic is selected |
+## Updates
 
----
+**Periodic:** Polls Lexus Connected Services at the selected interval. The default is 30 minutes.
 
-## Update modes
-
-### Periodic (automatic polling)
-
-The integration polls Lexus Connected Services every _N_ minutes (configurable, default 30). Useful when you want the sensors to stay current without any extra automation work.
-
-### Manual (triggered by automation)
-
-No automatic polling. The sensors only update when you explicitly call the `lexus_status.refresh` service. Use this when you want full control over when the car is woken up, for example only after you know the car has been driven or plugged in.
+**Manual:** Disables scheduled polling. Call `lexus_status.refresh` from an automation or the Home Assistant UI when you want to request an update. This is useful when you want to control when Lexus Connected Services is contacted.
 
 ```yaml
-# Example automation: refresh whenever the car is plugged in
+# Example: refresh after the charging sensor reports that charging has started
 automation:
   trigger:
     - platform: state
       entity_id: sensor.lexus_ux300e_charging_status
       to: "charging"
   action:
-    - service: lexus_status.refresh
+    - action: lexus_status.refresh
 ```
 
 ---
@@ -98,26 +83,21 @@ automation:
 
 ### `lexus_status.refresh`
 
-Immediately fetches the latest status from Lexus Connected Services for all configured vehicles, regardless of the configured update mode.
-
-| Field | Value |
-|---|---|
-| Service | `lexus_status.refresh` |
-| Target | _(none — applies to all configured vehicles)_ |
+Fetches the latest status for every configured Lexus Status entry, regardless of its update mode. The service has no target fields.
 
 ---
 
 ## Entities created
 
-| Entity | Description |
+| Sensor | Value |
 |---|---|
-| `sensor.<name>_battery_level` | State of charge in % |
-| `sensor.<name>_electric_range` | Remaining electric range in km |
-| `sensor.<name>_charging_status` | Raw charging status string from the Lexus API (e.g. `charging`, `connected`, `disconnected`) |
-| `sensor.<name>_remaining_charge_time` | Minutes until fully charged |
-| `sensor.<name>_last_synced_from_lexus` | Timestamp of the last successful data fetch from the Lexus API |
+| Battery level | State of charge (%) |
+| Electric range | Estimated remaining range (km) |
+| Charging status | Status reported by Lexus (for example, `charging` or `connected`) |
+| Remaining charge time | Estimated minutes until fully charged |
+| Last synced from Lexus | Timestamp of the last successful data fetch |
 
-The `battery_level` sensor also exposes `vin` and `last_lexus_update` as extra state attributes.
+The battery-level sensor also exposes the vehicle `vin` and `last_lexus_update` as state attributes.
 
 ---
 
@@ -127,27 +107,22 @@ After setup you can change the update mode and polling interval via **Settings �
 
 ---
 
-## HA Core version check
+## Compatibility
 
-Before treating this as a production-ready install, verify the following in Home Assistant Core 2026.9.1:
+The integration targets Home Assistant Core **2024.1 and newer**. Its config-flow, coordinator, and platform setup APIs were checked against Core **2026.10.2**. That was a source/API compatibility review, not an end-to-end run inside a 2026.10.2 Home Assistant instance.
 
-- [ ] HA Core is running at version 2026.9.1 or newer
-- [ ] The custom component is installed in `config/custom_components/lexus_status`
-- [ ] `pytoyoda>=5.0.0` has been resolved by Home Assistant without startup errors
-- [ ] The integration config flow opens and accepts your Lexus Connected Services credentials
-- [ ] A vehicle is selected from the account and the config entry is created
-- [ ] The entities are created under the expected device and update cycle
-- [ ] Manual refresh works via `lexus_status.refresh`
-- [ ] No `missing_library`, `cannot_connect`, or auth errors are logged during startup
+Home Assistant resolves the `pytoyoda>=5.0.0` dependency declared in the integration manifest. The import is at module scope so Home Assistant can load it through its integration import executor rather than blocking the event loop.
 
 ---
 
 ## Troubleshooting
 
-* **`cannot_connect`** during setup – Check that your Lexus credentials work in the MyLexus mobile app and that your HA instance has internet access.
-* **`missing_library`** – Make sure `pytoyoda>=5.0.0` is listed in the integration manifest and that HA has installed it (check HA logs on startup).
-* **EU accounts only** – `pytoyoda` only supports Toyota Connected Europe. North American / Asian Toyota/Lexus accounts are not supported.
-* **Battery level not updating** – The Lexus Connected Services API only refreshes the car's data when the car is awake (ignition on, or actively charging). Values can be stale for parked vehicles. In Manual mode, call `lexus_status.refresh` after you know the car is awake.
+| Symptom | What to check |
+|---|---|
+| `cannot_connect` during setup | Confirm the credentials work in the MyLexus / Lexus Link app and that Home Assistant has internet access. |
+| `missing_library` | Restart Home Assistant after installation and check the logs for dependency installation errors. |
+| Account is unsupported | Only Toyota Connected Europe accounts are supported; North American and Asian accounts are not supported by `pytoyoda`. |
+| Sensor values look stale | Lexus may only refresh vehicle data while the car is awake or charging. In Manual mode, call `lexus_status.refresh` when the vehicle is available. |
 
 ---
 
@@ -158,7 +133,7 @@ custom_components/lexus_status/
 ├── __init__.py          # Integration setup / teardown
 ├── config_flow.py       # Multi-step UI configuration
 ├── const.py             # Domain constants and options
-├── coordinator.py       # DataUpdateCoordinator (polling + Lexus refresh logic)
+├── coordinator.py        # DataUpdateCoordinator and Lexus refresh logic
 ├── manifest.json        # HA integration manifest
 ├── sensor.py            # Sensor platform entities
 ├── strings.json         # UI string keys
