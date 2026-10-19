@@ -100,7 +100,7 @@ class LexusStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         if vehicle is None:
             vehicle = vehicles[0]
 
-        await vehicle.update()
+        await vehicle.update(only=["electric_status"])
 
         ev = vehicle.electric_status
 

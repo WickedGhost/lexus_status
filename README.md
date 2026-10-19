@@ -6,6 +6,10 @@ It provides battery level, electric range, charging status, remaining charge tim
 
 ## Release notes
 
+### v1.0.4
+- Request only electric vehicle status, avoiding a pytoyoda trip-history API incompatibility
+- Require pytoyoda 6.0.0 or newer
+
 ### v1.0.3
 - Load `pytoyoda` through Home Assistant's integration import path to avoid blocking the event loop during setup and updates
 
@@ -111,7 +115,7 @@ After setup you can change the update mode and polling interval via **Settings â
 
 The integration targets Home Assistant Core **2024.1 and newer**. Its config-flow, coordinator, and platform setup APIs were checked against Core **2026.10.2**. That was a source/API compatibility review, not an end-to-end run inside a 2026.10.2 Home Assistant instance.
 
-Home Assistant resolves the `pytoyoda>=5.0.0` dependency declared in the integration manifest. The import is at module scope so Home Assistant can load it through its integration import executor rather than blocking the event loop.
+Home Assistant resolves the `pytoyoda>=6.0.0` dependency declared in the integration manifest. The integration requests only the electric-status endpoint; trip history is not needed for its sensors. Its `pytoyoda` import is at module scope so Home Assistant loads it through the integration import executor rather than blocking the event loop.
 
 ---
 
@@ -121,6 +125,7 @@ Home Assistant resolves the `pytoyoda>=5.0.0` dependency declared in the integra
 |---|---|
 | `cannot_connect` during setup | Confirm the credentials work in the MyLexus / Lexus Link app and that Home Assistant has internet access. |
 | `missing_library` | Restart Home Assistant after installation and check the logs for dependency installation errors. |
+| `Api.get_trips()` reports an unexpected `route` argument | Update the integration to v1.0.4 or newer; it requests only electric status and no longer invokes trip history. |
 | Account is unsupported | Only Toyota Connected Europe accounts are supported; North American and Asian accounts are not supported by `pytoyoda`. |
 | Sensor values look stale | Lexus may only refresh vehicle data while the car is awake or charging. In Manual mode, call `lexus_status.refresh` when the vehicle is available. |
 
